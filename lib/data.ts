@@ -1,0 +1,305 @@
+export interface ServiceCategory {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  iconName: string;
+  heroBadge: string;
+  features: string[];
+  subServices: {
+    title: string;
+    description: string;
+    techStack: string[];
+  }[];
+}
+
+export interface TechItem {
+  name: string;
+  category: string;
+  description: string;
+  logoUrl: string;
+  badgeColor: string;
+}
+
+export interface TechStackCategory {
+  id: string;
+  name: string;
+  description: string;
+  techs: TechItem[];
+}
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  date: string;
+  readTime: string;
+  content: string;
+}
+
+export const SERVICES_DATA: ServiceCategory[] = [
+  {
+    id: "software-dev",
+    slug: "software-development",
+    title: "Software Development",
+    subtitle: "Custom Web, Mobile & Enterprise Desktop Solutions",
+    description: "LogicBlaze builds robust, high-performance, scalable software products customized for startups and global enterprises. From cloud-native web apps to cross-platform mobile & desktop solutions.",
+    iconName: "Code2",
+    heroBadge: "Software Engineering Excellence",
+    features: [
+      "Modern Web Applications (React, Next.js, Node.js)",
+      "Native & Cross-Platform Mobile Apps (iOS, Android, Flutter)",
+      "High-Performance Desktop Applications (Electron, Tauri, .NET)",
+      "Enterprise Microservices & Cloud-Native API Architecture"
+    ],
+    subServices: [
+      {
+        title: "Web Application Development",
+        description: "Full-stack web applications with blazing-fast rendering, seamless API integrations, and intuitive UX.",
+        techStack: ["Next.js", "React", "Node.js", "TypeScript", "PostgreSQL", "Tailwind CSS"]
+      },
+      {
+        title: "Mobile App Development",
+        description: "High-converting iOS & Android applications with offline sync, biometric security, and fluid native performance.",
+        techStack: ["Flutter", "React Native", "Swift", "Kotlin", "Firebase", "REST/GraphQL"]
+      },
+      {
+        title: "Desktop Application Development",
+        description: "Cross-platform desktop tools engineered for enterprise workflows, high data processing, and system hardware integration.",
+        techStack: ["Electron", "Tauri", "C# / .NET", "C++", "SQLite", "Rust"]
+      }
+    ]
+  },
+  {
+    id: "ai-automation",
+    slug: "ai-solutions-automation",
+    title: "AI Solutions & Automation",
+    subtitle: "Intelligent Chatbots, LLMs & Process Automation",
+    description: "Transform your business with cutting-edge Artificial Intelligence. LogicBlaze engineers customized AI agents, automated workflow pipelines, LLM fine-tuning, and predictive analytics.",
+    iconName: "Bot",
+    heroBadge: "Next-Gen AI & Automation",
+    features: [
+      "Custom Conversational AI Chatbots & Voice Agents",
+      "LLM Integration & Fine-Tuning (OpenAI, Claude, Llama 3)",
+      "RAG Architecture & Enterprise Knowledge Bases",
+      "Workflow & RPA Process Automation"
+    ],
+    subServices: [
+      {
+        title: "AI Chatbots & Intelligent Agents",
+        description: "Deploy 24/7 autonomous customer support & sales agents integrated directly with your CRM and knowledge base.",
+        techStack: ["OpenAI API", "LangChain", "Python", "FastAPI", "Pinecone Vector DB", "RAG"]
+      },
+      {
+        title: "Business Process & RPA Automation",
+        description: "Automate repetitive data processing, invoice workflows, and cross-platform sync to slash operational costs.",
+        techStack: ["Make / Zapier", "Python Scripts", "n8n", "Node.js", "Docker", "Selenium"]
+      },
+      {
+        title: "Predictive Analytics & Machine Learning",
+        description: "Extract predictive insights from your enterprise data with custom ML models and interactive dashboards.",
+        techStack: ["PyTorch", "TensorFlow", "Pandas", "Scikit-Learn", "AWS SageMaker"]
+      }
+    ]
+  },
+  {
+    id: "digital-marketing",
+    slug: "digital-marketing",
+    title: "Digital Marketing & Growth",
+    subtitle: "Performance Marketing, SEO & Growth Hacking",
+    description: "Scale your user acquisition and organic visibility with data-driven marketing strategies. From technical On-Page SEO to high-ROI PPC and social media management.",
+    iconName: "TrendingUp",
+    heroBadge: "Data-Driven Digital Growth",
+    features: [
+      "Technical & Content On-Page SEO Optimization",
+      "Pay-Per-Click (PPC) & Performance Ad Campaigns",
+      "Social Media Marketing & Brand Building (SMM)",
+      "Conversion Rate Optimization (CRO) & Funnel Analytics"
+    ],
+    subServices: [
+      {
+        title: "Search Engine Optimization (SEO)",
+        description: "Rank #1 on Google for high-intent keywords with technical site audits, schema markup, and content strategy.",
+        techStack: ["Google Search Console", "On-Page SEO", "Schema.org", "Technical Audit"]
+      },
+      {
+        title: "Performance & PPC Advertising",
+        description: "Maximize ROI on Meta Ads, Google Ads, and LinkedIn Ads with automated audience targeting & copy testing.",
+        techStack: ["Google Ads", "Meta Ads", "LinkedIn Ads", "ROI Tracking"]
+      },
+      {
+        title: "Social Media & Content Strategy",
+        description: "Engage your audience with viral multi-channel social campaigns, infographics, and authority blog content.",
+        techStack: ["SMM Campaign", "Content Strategy", "Copywriting", "Brand Identity"]
+      }
+    ]
+  }
+];
+
+export const TECH_STACK_CATEGORIES: TechStackCategory[] = [
+  {
+    id: "web",
+    name: "Web Tech",
+    description: "Next-generation web development frameworks, backend APIs, and cloud databases.",
+    techs: [
+      { name: "Next.js", category: "Framework", description: "SSR & Static Site Generation for enterprise speed.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg", badgeColor: "#081b33" },
+      { name: "React", category: "Frontend", description: "Component-driven UI library for dynamic apps.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", badgeColor: "#1fa7e6" },
+      { name: "TypeScript", category: "Language", description: "Type-safe robust JavaScript development.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg", badgeColor: "#005ba3" },
+      { name: "Node.js", category: "Backend", description: "High-concurrency event-driven server runtime.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg", badgeColor: "#0d3356" },
+      { name: "Python", category: "Backend / AI", description: "Versatile language for APIs and data processing.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg", badgeColor: "#3d1e6d" },
+      { name: "PostgreSQL", category: "Database", description: "Enterprise relational database system.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg", badgeColor: "#1fa7e6" }
+    ]
+  },
+  {
+    id: "mobile",
+    name: "Mobile Apps",
+    description: "Native and cross-platform mobile frameworks for iOS and Android.",
+    techs: [
+      { name: "Flutter", category: "Cross-Platform", description: "High-performance Google framework for iOS/Android.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg", badgeColor: "#1fa7e6" },
+      { name: "React Native", category: "Cross-Platform", description: "Build native mobile apps using React.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", badgeColor: "#005ba3" },
+      { name: "Swift", category: "iOS Native", description: "Apple official native programming language.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg", badgeColor: "#3d1e6d" },
+      { name: "Kotlin", category: "Android Native", description: "Modern Android app development language.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg", badgeColor: "#081b33" },
+      { name: "Firebase", category: "BaaS", description: "Realtime database, push notifications, & auth.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg", badgeColor: "#1fa7e6" }
+    ]
+  },
+  {
+    id: "desktop",
+    name: "Desktop Apps",
+    description: "Secure, cross-platform desktop application stacks.",
+    techs: [
+      { name: "Electron", category: "Desktop", description: "Build cross-platform desktop apps with JS/HTML.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/electron/electron-original.svg", badgeColor: "#005ba3" },
+      { name: "Tauri", category: "Desktop / Rust", description: "Lightweight, ultra-fast Rust-powered desktop framework.", logoUrl: "https://api.iconify.design/logos:tauri.svg", badgeColor: "#1fa7e6" },
+      { name: ".NET / C#", category: "Enterprise", description: "Microsoft enterprise desktop and service stack.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg", badgeColor: "#3d1e6d" },
+      { name: "SQLite", category: "Embedded DB", description: "High-speed local database for desktop tools.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg", badgeColor: "#0d3356" }
+    ]
+  },
+  {
+    id: "ai",
+    name: "AI & Machine Learning",
+    description: "State-of-the-art Large Language Models, vector DBs, and automation.",
+    techs: [
+      { name: "OpenAI GPT-4", category: "LLM", description: "Advanced conversational intelligence & text generation.", logoUrl: "https://api.iconify.design/logos:openai-icon.svg", badgeColor: "#1fa7e6" },
+      { name: "LangChain", category: "AI Framework", description: "Building complex LLM workflows & agent chains.", logoUrl: "https://api.iconify.design/simple-icons:langchain.svg", badgeColor: "#005ba3" },
+      { name: "PyTorch", category: "ML Engine", description: "Deep learning framework for custom model training.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg", badgeColor: "#3d1e6d" },
+      { name: "Pinecone", category: "Vector DB", description: "High-speed vector database for RAG search.", logoUrl: "https://api.iconify.design/logos:pinecone-icon.svg", badgeColor: "#081b33" },
+      { name: "FastAPI", category: "AI Microservice", description: "Ultra-fast Python framework for ML inference APIs.", logoUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg", badgeColor: "#1fa7e6" }
+    ]
+  },
+  {
+    id: "marketing",
+    name: "Digital Marketing Services",
+    description: "Growth, user acquisition, social media campaigns, and search optimization.",
+    techs: [
+      { name: "Social Media Marketing (SMM)", category: "Brand Growth", description: "Multi-channel Instagram, Meta & LinkedIn campaigns.", logoUrl: "https://api.iconify.design/logos:meta-icon.svg", badgeColor: "#005ba3" },
+      { name: "Content Marketing & Copywriting", category: "Authority", description: "High-converting blogs, articles & landing page copy.", logoUrl: "https://api.iconify.design/lucide:file-text.svg", badgeColor: "#1fa7e6" },
+      { name: "Search Engine Optimization (SEO)", category: "Organic Growth", description: "Rank #1 on Google with technical On-Page SEO.", logoUrl: "https://api.iconify.design/logos:google-icon.svg", badgeColor: "#3d1e6d" },
+      { name: "Performance & PPC Advertising", category: "Paid Growth", description: "High-ROI Google Ads, Meta Ads & targeted PPC.", logoUrl: "https://api.iconify.design/logos:google-ads.svg", badgeColor: "#081b33" },
+      { name: "Conversion Rate Optimization (CRO)", category: "Funnel Strategy", description: "A/B testing, user journey audits & funnel optimization.", logoUrl: "https://api.iconify.design/lucide:trending-up.svg", badgeColor: "#1fa7e6" },
+      { name: "Email Marketing & Automation", category: "Retention", description: "Automated drip campaigns, newsletters & customer retention.", logoUrl: "https://api.iconify.design/logos:mailchimp-freddie.svg", badgeColor: "#005ba3" }
+    ]
+  }
+];
+
+export const CALCULATOR_OPTIONS = {
+  serviceTypes: [
+    { id: "web", name: "Web Application", baseCost: 1500, baseWeeks: 3 },
+    { id: "mobile", name: "Mobile App (iOS & Android)", baseCost: 2200, baseWeeks: 4 },
+    { id: "desktop", name: "Desktop Software", baseCost: 2000, baseWeeks: 4 },
+    { id: "ai", name: "AI Agent / Chatbot Automation", baseCost: 1800, baseWeeks: 3 },
+    { id: "marketing", name: "Complete SEO & Digital Marketing", baseCost: 1000, baseWeeks: 2 }
+  ],
+  scopes: [
+    { id: "mvp", name: "MVP (Core Essential Features)", multiplier: 1.0 },
+    { id: "standard", name: "Standard (Production-Ready)", multiplier: 1.5 },
+    { id: "enterprise", name: "Enterprise (Scale, High Security & SLA)", multiplier: 2.2 }
+  ],
+  addons: [
+    { id: "auth", name: "User Auth & Roles", cost: 300 },
+    { id: "payment", name: "Stripe / Paypal Payments", cost: 400 },
+    { id: "ai_bot", name: "AI Chatbot / LLM Integration", cost: 800 },
+    { id: "analytics", name: "Advanced Analytics & Reporting", cost: 350 },
+    { id: "seo_schema", name: "Enterprise SEO & Schema Markup", cost: 500 }
+  ]
+};
+
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "how-ai-chatbots-transform-saas-customer-support",
+    title: "How AI Chatbots are Revolutionizing SaaS Customer Support in 2026",
+    excerpt: "Discover how custom LLM-powered conversational agents reduce ticket resolution time by 75% while boosting customer satisfaction.",
+    category: "AI Solutions",
+    author: "LogicBlaze AI Team",
+    date: "July 20, 2026",
+    readTime: "5 min read",
+    content: `
+      Artificial Intelligence is no longer just a buzzword in customer support—it is the foundation of modern SaaS scalability.
+
+      ### Key Benefits of Custom AI Chatbots:
+      1. **24/7 Instant Response**: Zero wait time for global user queries.
+      2. **RAG Architecture**: Answers sourced directly from your company's live documentation and CRM.
+      3. **Human Escalation**: Seamless handoff to live agents when high urgency is detected.
+
+      At **LogicBlaze**, we build customized OpenAI and Claude 3 integrations that blend effortlessly with your workflow.
+    `
+  },
+  {
+    slug: "building-scalable-web-apps-with-nextjs-app-router",
+    title: "Building High-Performance Web Applications with Next.js 14",
+    excerpt: "A deep dive into Server Components, dynamic streaming, and On-Page SEO optimizations for high-traffic platforms.",
+    category: "Software Development",
+    author: "LogicBlaze Tech Lead",
+    date: "July 15, 2026",
+    readTime: "7 min read",
+    content: `
+      Speed and search engine ranking go hand-in-hand. Next.js 14 App Router provides developer ergonomics and unmatched page load speeds.
+
+      ### Why We Recommend Next.js for Enterprise Web Apps:
+      - **Server-Side Rendering (SSR)**: Instant HTML generation for search crawlers.
+      - **Built-in Image & Font Optimization**: Zero layout shifts and fast LCP scores.
+      - **Dynamic JSON-LD Schema Integration**: Maximum rich snippet visibility on Google.
+    `
+  },
+  {
+    slug: "complete-on-page-seo-checklist-for-software-agencies",
+    title: "The Ultimate On-Page SEO Checklist for Tech Agencies",
+    excerpt: "Learn how to optimize headings, schema markup, metadata, and core web vitals for maximum organic rankings.",
+    category: "Digital Marketing",
+    author: "LogicBlaze Growth Team",
+    date: "July 10, 2026",
+    readTime: "6 min read",
+    content: `
+      Organic traffic remains the highest converting acquisition channel for tech businesses.
+
+      ### Essential On-Page SEO Factors:
+      - **H1-H3 Tag Structure**: Semantic alignment with targeted keywords.
+      - **Schema.org Structured Data**: Clear Organization and Service definitions.
+      - **Mobile Responsiveness**: Google mobile-first indexing compliance.
+    `
+  }
+];
+
+export const FAQS_LIST = [
+  {
+    question: "01. What services does LogicBlaze specialize in?",
+    answer: "LogicBlaze provides full-stack Software Development (Web, Mobile & Desktop Apps), AI Solutions & Automation (AI Chatbots, LLMs, Process Automation), and Digital Marketing (Technical SEO, PPC, Social Media Management)."
+  },
+  {
+    question: "02. How do you estimate project timelines and cost?",
+    answer: "We use our transparent Project Estimation Calculator based on your project scope, features, and target platforms. You get a clear breakdown within minutes, backed by fixed milestones."
+  },
+  {
+    question: "03. Can you integrate AI Chatbots into our existing software?",
+    answer: "Yes! We specialize in fine-tuning LLMs and connecting custom RAG chatbots directly into your existing web, mobile, or enterprise desktop applications via secure APIs."
+  },
+  {
+    question: "04. Do you offer ongoing maintenance and SEO services?",
+    answer: "Absolutely. We offer post-launch maintenance, cloud deployment monitoring, and monthly On-Page and Off-Page SEO growth retainers."
+  },
+  {
+    question: "05. Which tech stacks do you recommend for new projects?",
+    answer: "We tailor tech stacks to your business goals. For Web: Next.js & React; Mobile: Flutter & Swift/Kotlin; Desktop: Electron & Tauri; AI: OpenAI, Python & LangChain."
+  }
+];
