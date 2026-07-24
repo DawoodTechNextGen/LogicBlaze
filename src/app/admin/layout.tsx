@@ -20,12 +20,81 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+import { useEffect, useState } from 'react';
+import { MonitorX } from 'lucide-react';
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+
+  useEffect(() => {
+    // 1. Check if device screen width is smaller than desktop (1024px)
+    const checkScreenSize = () => {
+      setIsMobileDevice(window.innerWidth < 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    // 2. Check Auth Session
+    if (pathname !== '/admin/login') {
+      fetch('/api/auth/check')
+        .then((res) => {
+          if (!res.ok) {
+            setIsAuthenticated(false);
+            router.push('/admin/login');
+          } else {
+            setIsAuthenticated(true);
+          }
+        })
+        .catch(() => {
+          setIsAuthenticated(false);
+          router.push('/admin/login');
+        });
+    } else {
+      setIsAuthenticated(true);
+    }
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, [pathname, router]);
 
   if (pathname === '/admin/login') {
     return <>{children}</>;
+  }
+
+  // Mobile Device Block Screen
+  if (isMobileDevice) {
+    return (
+      <div className="min-h-screen bg-[#0a0b0e] text-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full bg-[#0c0f15] border border-red-500/30 p-8 rounded-3xl space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="w-16 h-16 rounded-2xl bg-red-950/60 border border-red-500/40 flex items-center justify-center mx-auto text-red-400">
+            <MonitorX className="w-8 h-8" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-black text-white">Desktop Access Only</h2>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              LogicBlaze Admin Panel and SEO Suite is restricted to Laptop & Desktop computers only for security and formatting reasons.
+            </p>
+          </div>
+          <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-[11px] font-mono text-blue-400">
+            Please open this URL on a Desktop or Laptop screen (Width ≥ 1024px).
+          </div>
+          <Link href="/" className="btn-glass w-full py-2.5 text-xs font-bold block">
+            Return to Main Website
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated === false || isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-[#0a0b0e] text-white flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[#3B82F6] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   const navItems = [

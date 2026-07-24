@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Calculator,
   X,
+  Menu,
   Star,
   Zap,
   Layers,
@@ -276,6 +277,8 @@ export default function Home() {
     }
   ];
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const activeCaseStudies = dynamicCaseStudies.length > 0 ? dynamicCaseStudies.map((cs) => ({
     ...cs,
     desc: cs.description || cs.desc,
@@ -290,24 +293,25 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0b0e] text-white selection:bg-[#3B82F6] selection:text-black font-sans relative overflow-x-hidden">
       {/* Background Ambient Glows */}
-      <div className="glow-ambient top-[-10%] left-[20%] w-[600px] h-[600px] bg-[#3B82F6]/10 animate-pulse-glow" />
-      <div className="glow-ambient top-[35%] right-[-10%] w-[700px] h-[700px] bg-[#A855F7]/08 animate-pulse-glow" />
-      <div className="glow-ambient bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-[#3B82F6]/08" />
+      <div className="glow-ambient top-[-10%] left-[20%] w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-[#3B82F6]/10 animate-pulse-glow" />
+      <div className="glow-ambient top-[35%] right-[-10%] w-[350px] sm:w-[700px] h-[350px] sm:h-[700px] bg-[#A855F7]/08 animate-pulse-glow" />
+      <div className="glow-ambient bottom-[10%] left-[-10%] w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-[#3B82F6]/08" />
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-[#0a0b0e]/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer group">
+      <header className="sticky top-0 z-50 bg-[#0a0b0e]/90 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
             <div className="relative">
               <div className="absolute inset-0 bg-[#3B82F6]/30 blur-md rounded-full group-hover:bg-[#3B82F6]/60 transition-all" />
-              <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-10 h-10 object-contain relative z-10 group-hover:scale-105 transition-transform" />
+              <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-9 h-9 sm:w-10 sm:h-10 object-contain relative z-10 group-hover:scale-105 transition-transform" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-white">
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
               Logic<span className="text-[#3B82F6]">Blaze</span>
             </span>
-          </div>
+          </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-gray-300">
             <a href="#services" className="hover:text-[#3B82F6] transition-colors">Capabilities</a>
             <a href="#work" className="hover:text-[#3B82F6] transition-colors">Case Studies</a>
             <a href="#process" className="hover:text-[#3B82F6] transition-colors">Process</a>
@@ -315,23 +319,98 @@ export default function Home() {
             <a href="#tech" className="hover:text-[#3B82F6] transition-colors">Tech Stack</a>
           </nav>
 
-          <div className="flex items-center gap-4">
+          {/* Right Header Buttons */}
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="btn-glass px-5 py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer"
+              className="btn-glass px-3 py-2 sm:px-5 sm:py-2.5 text-xs md:text-sm font-bold flex items-center gap-1.5 sm:gap-2 cursor-pointer"
             >
-              <Calculator className="w-4 h-4 text-[#3B82F6]" />
-              Cost Estimator
+              <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#3B82F6]" />
+              <span className="hidden sm:inline">Cost Estimator</span>
+              <span className="sm:hidden">Estimate</span>
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="btn-neon px-6 py-2.5 text-xs md:text-sm flex items-center gap-2 cursor-pointer"
+              className="hidden sm:flex btn-neon px-5 py-2.5 text-xs md:text-sm items-center gap-2 cursor-pointer"
             >
               Start Project
               <ArrowRight className="w-4 h-4" />
             </button>
+
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-gray-300 hover:text-white rounded-xl bg-white/5 border border-white/10"
+              aria-label="Toggle Menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile & Tablet Fullscreen Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden bg-[#0c0f15]/95 backdrop-blur-2xl border-b border-white/10 px-6 py-6 space-y-4 animate-fade-in-up">
+            <nav className="flex flex-col gap-4 text-base font-bold text-gray-200">
+              <a
+                href="#services"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between"
+              >
+                <span>Capabilities</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </a>
+              <a
+                href="#work"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between"
+              >
+                <span>Case Studies</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </a>
+              <a
+                href="#process"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between"
+              >
+                <span>Process Roadmap</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </a>
+              <a
+                href="#testimonials"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between"
+              >
+                <span>Client Reviews</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </a>
+              <a
+                href="#tech"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between"
+              >
+                <span>Tech Stack</span>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
+              </a>
+              <Link
+                href="/blog"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 border-b border-white/5 hover:text-[#3B82F6] transition-colors flex items-center justify-between text-[#3B82F6]"
+              >
+                <span>Insights & Engineering Blog</span>
+                <ChevronRight className="w-4 h-4 text-[#3B82F6]" />
+              </Link>
+            </nav>
+
+            <button
+              onClick={() => { setIsMobileMenuOpen(false); setIsModalOpen(true); }}
+              className="btn-neon w-full py-3 text-sm font-bold flex items-center justify-center gap-2 cursor-pointer mt-4"
+            >
+              Start Project Proposal
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </header>
 
       {/* HERO SECTION */}
