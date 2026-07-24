@@ -21,7 +21,45 @@ export default function AdminBlogsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
 
-  const handleDelete = (id: string) => {
+  React.useEffect(() => {
+    fetch('/api/blogs')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((b: any) => ({
+            id: b.id,
+            title: b.title,
+            slug: b.slug,
+            excerpt: b.excerpt,
+            content: b.content,
+            category: b.category,
+            tags: b.focus_keywords ? b.focus_keywords.split(',') : ['Engineering'],
+            author: {
+              name: b.author_name || 'LogicBlaze Admin',
+              role: b.author_role || 'Founder & CTO',
+              avatar: b.author_avatar || '/logo-transparent.png'
+            },
+            featuredImage: b.cover_image || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80',
+            publishedAt: b.published_at || '2026-07-24',
+            readTime: b.read_time || '6 min read',
+            status: 'published' as const,
+            views: 12000,
+            seo: {
+              seoTitle: b.seo_title || b.title,
+              metaDescription: b.meta_description || b.excerpt,
+              focusKeywords: b.focus_keywords ? b.focus_keywords.split(',') : [],
+              canonicalUrl: b.canonical_url || `https://logicblaze.co/blog/${b.slug}`,
+              ogImage: b.cover_image,
+              noIndex: Boolean(b.is_no_index)
+            }
+          }));
+          setBlogs(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this blog post?')) {
       setBlogs(blogs.filter((b) => b.id !== id));
     }

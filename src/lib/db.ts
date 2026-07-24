@@ -145,6 +145,37 @@ export async function initDatabase() {
       `);
     }
 
+    // Site Settings Table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS site_settings (
+        id VARCHAR(50) PRIMARY KEY,
+        site_title VARCHAR(255) NOT NULL,
+        meta_description TEXT NOT NULL,
+        og_image TEXT,
+        gtag_id VARCHAR(100),
+        meta_pixel_id VARCHAR(100),
+        robots_txt TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      );
+    `);
+
+    // Seed default site settings if empty
+    const [settingRows]: any = await pool.query(`SELECT COUNT(*) as count FROM site_settings`);
+    if (settingRows[0].count === 0) {
+      await pool.query(
+        `INSERT INTO site_settings (id, site_title, meta_description, og_image, gtag_id, meta_pixel_id, robots_txt) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          '1',
+          'LogicBlaze | Top Software Engineering & AI Agency in Pakistan, USA & Europe',
+          'LogicBlaze is a global software transformation agency engineering high-throughput mobile apps, enterprise AI models, Next.js web systems, and Web3 protocols.',
+          'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
+          'G-LOGICBLAZE',
+          '9876543210123',
+          'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://logicblaze.co/sitemap.xml'
+        ]
+      );
+    }
+
     // Seed default reviews if empty
     const [reviewRows]: any = await pool.query(`SELECT COUNT(*) as count FROM reviews`);
     if (reviewRows[0].count === 0) {

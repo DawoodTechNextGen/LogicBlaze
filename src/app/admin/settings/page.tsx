@@ -17,8 +17,41 @@ export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SEOSettings>(DEFAULT_SEO_SETTINGS);
   const [saved, setSaved] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  React.useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.site_title) {
+          setSettings({
+            siteTitle: data.site_title,
+            defaultMetaDescription: data.meta_description,
+            defaultOgImage: data.og_image,
+            gtagId: data.gtag_id,
+            metaPixelId: data.meta_pixel_id,
+            googleSearchConsoleVerified: true,
+            sitemapEnabled: true,
+            robotsTxtCustom: data.robots_txt
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        site_title: settings.siteTitle,
+        meta_description: settings.defaultMetaDescription,
+        og_image: settings.defaultOgImage,
+        gtag_id: settings.gtagId,
+        meta_pixel_id: settings.metaPixelId,
+        robots_txt: settings.robotsTxtCustom
+      })
+    });
+
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };

@@ -10,14 +10,14 @@ export interface SEOSettings {
 }
 
 export const DEFAULT_SEO_SETTINGS: SEOSettings = {
-  siteTitle: 'LogicBlaze | Digital Transformation & Product Engineering Studio',
-  defaultMetaDescription: 'Next-generation software engineering studio specializing in AI neural models, mobile applications, high-throughput cloud web systems, and Web3 ecosystems.',
+  siteTitle: 'LogicBlaze | Top Software Engineering & AI Agency in Pakistan, USA & Europe',
+  defaultMetaDescription: 'LogicBlaze is a global software transformation agency engineering high-throughput mobile apps, enterprise AI models, Next.js web systems, and Web3 protocols.',
   defaultOgImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
-  gtagId: 'G-CBX3B82F9',
+  gtagId: 'G-LOGICBLAZE',
   metaPixelId: '9876543210123',
   googleSearchConsoleVerified: true,
   sitemapEnabled: true,
-  robotsTxtCustom: 'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://logicblaze.com/sitemap.xml'
+  robotsTxtCustom: 'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://logicblaze.co/sitemap.xml'
 };
 
 // Site Kit Analytics Metrics Simulation

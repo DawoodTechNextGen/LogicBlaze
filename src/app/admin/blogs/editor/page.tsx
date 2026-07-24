@@ -148,10 +148,44 @@ function RankMathBlogEditorForm() {
 
   const rankMathScore = calculateRankMathScore();
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Rank Math SEO Post successfully ${postStatus === 'published' ? 'Published' : 'Saved as Draft'}!`);
-    router.push('/admin/blogs');
+    if (!title) return alert('Article Title is required!');
+
+    const payload = {
+      title,
+      slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      excerpt: excerpt || title,
+      content: content || `<p>${title}</p>`,
+      category: category || 'Enterprise Web',
+      author_name: 'LogicBlaze Admin',
+      author_role: 'Founder & CTO',
+      author_avatar: '/logo-transparent.png',
+      published_at: new Date().toISOString().split('T')[0],
+      read_time: '6 min read',
+      cover_image: featuredImage || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80',
+      seo_title: seoTitle || title,
+      meta_description: metaDescription || excerpt || title,
+      canonical_url: canonicalUrl || `https://logicblaze.co/blog/${slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+      focus_keywords: focusKeywords || category,
+      is_no_index: false
+    };
+
+    try {
+      const res = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error('Failed to publish article');
+
+      alert(`Article "${title}" published and saved into MySQL Database successfully!`);
+      router.push('/admin/blogs');
+      router.refresh();
+    } catch (err: any) {
+      alert(`Error publishing post: ${err.message}`);
+    }
   };
 
   return (
