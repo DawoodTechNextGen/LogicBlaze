@@ -1,25 +1,30 @@
 {
-  "name": "logicblaze-web",
-  "version": "1.0.0",
+  "name": "cubix-app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.8",
-    "lucide-react": "^0.453.0",
-    "mysql2": "^3.23.1",
-    "next": "^15.0.0",
-    "react": "^19.0.0-rc-6f73f7217d-20241021",
-    "react-dom": "^19.0.0-rc-6f73f7217d-20241021"
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.26.0",
+    "next": "16.2.11",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^5.7.0",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "typescript": "^5.6.2"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
