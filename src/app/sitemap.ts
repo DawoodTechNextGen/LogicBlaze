@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { INITIAL_BLOGS } from '@/lib/blog-store';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://cubix.lab';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://logicblaze.com';
 
   // Dynamic Blog Posts URLs
   const blogUrls = INITIAL_BLOGS.map((post) => ({

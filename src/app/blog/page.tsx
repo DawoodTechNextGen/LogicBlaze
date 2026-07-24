@@ -12,46 +12,99 @@ import {
   ChevronRight,
   Globe2,
   Share2,
-  Star
+  Star,
+  Calculator
 } from 'lucide-react';
 import { INITIAL_BLOGS, CATEGORIES, BlogPost } from '@/lib/blog-store';
 
 export default function BlogListingPage() {
+  const [blogsList, setBlogsList] = useState<BlogPost[]>(INITIAL_BLOGS);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const filteredPosts = INITIAL_BLOGS.filter((post) => {
+  React.useEffect(() => {
+    fetch('/api/blogs')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((b: any) => ({
+            id: b.id,
+            title: b.title,
+            slug: b.slug,
+            excerpt: b.excerpt,
+            content: b.content,
+            category: b.category,
+            tags: b.focus_keywords ? b.focus_keywords.split(',') : ['Engineering'],
+            author: {
+              name: b.author_name || 'LogicBlaze Admin',
+              role: b.author_role || 'Founder & CTO',
+              avatar: b.author_avatar || '/logo-transparent.png'
+            },
+            featuredImage: b.cover_image || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80',
+            publishedAt: b.published_at || '2026-07-24',
+            readTime: b.read_time || '6 min read',
+            status: 'published' as const,
+            views: 12000,
+            seo: {
+              seoTitle: b.seo_title || b.title,
+              metaDescription: b.meta_description || b.excerpt,
+              focusKeywords: b.focus_keywords ? b.focus_keywords.split(',') : [],
+              canonicalUrl: b.canonical_url || `https://logicblaze.co/blog/${b.slug}`,
+              ogImage: b.cover_image,
+              noIndex: Boolean(b.is_no_index)
+            }
+          }));
+          setBlogsList(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const filteredPosts = blogsList.filter((post) => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const featuredPost = INITIAL_BLOGS[0];
+  const featuredPost = blogsList[0] || INITIAL_BLOGS[0];
 
   return (
     <div className="min-h-screen bg-[#081b33] text-white selection:bg-[#3B82F6] selection:text-black font-sans relative overflow-x-hidden">
       {/* Background Ambient Glow */}
       <div className="glow-ambient top-[-5%] left-[25%] w-[600px] h-[600px] bg-[#3B82F6]/15 animate-pulse-glow" />
 
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#081b33]/85 backdrop-blur-xl border-b border-white/10">
+      {/* Navigation Header */}
+      <header className="sticky top-0 z-50 bg-[#0a0b0e]/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#A855F7] flex items-center justify-center shadow-lg shadow-[#3B82F6]/30">
-              <Sparkles className="w-6 h-6 text-black font-extrabold" />
-            </div>
+          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
+            <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
             <span className="text-2xl font-black tracking-tight text-white">
-              CUBIX<span className="text-[#3B82F6]">.BLOG</span>
+              Logic<span className="text-[#3B82F6]">Blaze</span>
             </span>
           </Link>
 
+          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+            <Link href="/#services" className="hover:text-[#3B82F6] transition-colors">Capabilities</Link>
+            <Link href="/#work" className="hover:text-[#3B82F6] transition-colors">Case Studies</Link>
+            <Link href="/#process" className="hover:text-[#3B82F6] transition-colors">Process</Link>
+            <Link href="/#testimonials" className="hover:text-[#3B82F6] transition-colors">Reviews</Link>
+            <Link href="/#tech" className="hover:text-[#3B82F6] transition-colors">Tech Stack</Link>
+          </nav>
+
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-xs font-bold text-gray-300 hover:text-[#3B82F6] transition-colors">
-              Main Site
+            <Link
+              href="/"
+              className="btn-glass px-5 py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer"
+            >
+              <Calculator className="w-4 h-4 text-[#3B82F6]" />
+              Cost Estimator
             </Link>
-            <Link href="/admin" className="btn-neon px-5 py-2.5 text-xs font-bold flex items-center gap-2">
-              Admin Portal
+            <Link
+              href="/"
+              className="btn-neon px-6 py-2.5 text-xs md:text-sm flex items-center gap-2 cursor-pointer"
+            >
+              Start Project
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -198,9 +251,60 @@ export default function BlogListingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black border-t border-white/10 py-10 text-center text-xs text-gray-500">
-        © 2026 CUBIX.LAB. Full WordPress-grade SEO & Site Kit Analytics integrated.
+      {/* FOOTER */}
+      <footer className="bg-black border-t border-white/10 py-16 text-gray-400 text-sm">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+          <div className="col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#3B82F6]/30 blur-sm rounded-full" />
+                <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-8 h-8 object-contain relative z-10" />
+              </div>
+              <span className="text-xl font-black text-white">Logic<span className="text-[#3B82F6]">Blaze</span></span>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed max-w-sm">
+              LogicBlaze is a global software transformation agency engineering high-scale mobile applications, enterprise AI models, and cloud systems.
+            </p>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Capabilities</div>
+            <ul className="space-y-2.5 text-xs">
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Mobile Engineering</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">AI & Machine Learning</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Enterprise Web</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Web3 Protocols</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Company</div>
+            <ul className="space-y-2.5 text-xs">
+              <li><Link href="/#work" className="hover:text-[#3B82F6]">Case Studies</Link></li>
+              <li><Link href="/#process" className="hover:text-[#3B82F6]">Process</Link></li>
+              <li><Link href="/#testimonials" className="hover:text-[#3B82F6]">Client Reviews</Link></li>
+              <li><Link href="/blog" className="text-[#3B82F6] hover:underline font-semibold flex items-center gap-1">Insights & Blog</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Global Hubs</div>
+            <ul className="space-y-2.5 text-xs text-gray-500">
+              <li>San Francisco, CA</li>
+              <li>London, UK</li>
+              <li>Dubai, UAE</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 gap-4">
+          <div>© 2026 LOGICBLAZE. All rights reserved.</div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-gray-400">Privacy Policy</a>
+            <a href="#" className="hover:text-gray-400">Terms of Service</a>
+            <a href="#" className="hover:text-gray-400">Security SLA</a>
+          </div>
+        </div>
       </footer>
     </div>
   );

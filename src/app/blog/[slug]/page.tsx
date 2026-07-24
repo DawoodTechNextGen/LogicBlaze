@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import {
   Sparkles,
   ArrowLeft,
+  ArrowRight,
+  Calculator,
   Clock,
   Tag,
   Share2,
@@ -149,73 +151,84 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
       <div className="glow-ambient top-[-10%] left-[20%] w-[600px] h-[600px] bg-[#3B82F6]/15 animate-pulse-glow" />
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-[#081b33]/85 backdrop-blur-xl border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-[#0a0b0e]/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/blog" className="flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-[#3B82F6] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#3B82F6]" />
-            Back to Journal
+          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
+            <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-10 h-10 object-contain group-hover:scale-105 transition-transform" />
+            <span className="text-2xl font-black tracking-tight text-white">
+              Logic<span className="text-[#3B82F6]">Blaze</span>
+            </span>
           </Link>
 
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#A855F7] flex items-center justify-center shadow-lg shadow-[#3B82F6]/30">
-              <Sparkles className="w-5 h-5 text-black font-extrabold" />
-            </div>
-            <span className="text-xl font-black text-white">CUBIX<span className="text-[#3B82F6]">.BLOG</span></span>
-          </Link>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+            <Link href="/#services" className="hover:text-[#3B82F6] transition-colors">Capabilities</Link>
+            <Link href="/#work" className="hover:text-[#3B82F6] transition-colors">Case Studies</Link>
+            <Link href="/#process" className="hover:text-[#3B82F6] transition-colors">Process</Link>
+            <Link href="/#testimonials" className="hover:text-[#3B82F6] transition-colors">Reviews</Link>
+            <Link href="/#tech" className="hover:text-[#3B82F6] transition-colors">Tech Stack</Link>
+          </nav>
 
-          <Link href="/admin" className="text-xs font-bold text-gray-400 hover:text-[#3B82F6]">
-            Admin Portal
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/"
+              className="btn-glass px-5 py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer"
+            >
+              <Calculator className="w-4 h-4 text-[#3B82F6]" />
+              Cost Estimator
+            </Link>
+            <Link
+              href="/"
+              className="btn-neon px-6 py-2.5 text-xs md:text-sm flex items-center gap-2 cursor-pointer"
+            >
+              Start Project
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* ARTICLE ARTICLE CONTENT */}
-      <article className="max-w-4xl mx-auto px-6 pt-16 pb-24 space-y-10">
-        {/* Category & Tags */}
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3.5 py-1 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] text-xs font-bold uppercase">
-              {post.category}
-            </span>
-            <span className="text-xs font-mono text-gray-400 flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-gray-500" />
-              {post.publishedAt}
-            </span>
-            <span className="text-xs font-mono text-gray-400 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-gray-500" />
-              {post.readTime}
-            </span>
-          </div>
+      {/* Hero Header */}
+      <section className="relative pt-12 pb-8 max-w-4xl mx-auto px-6 z-10">
+        <div className="flex items-center gap-3 text-xs font-bold text-[#3B82F6] uppercase tracking-wider mb-6">
+          <span>{post.category}</span>
+          <span>•</span>
+          <span className="text-gray-400">{post.readTime}</span>
+        </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            {post.title}
-          </h1>
+        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+          {post.title}
+        </h1>
 
-          <p className="text-gray-300 text-lg leading-relaxed">
-            {post.excerpt}
-          </p>
+        <p className="text-lg text-gray-300 leading-relaxed mb-8">
+          {post.excerpt}
+        </p>
 
-          {/* Author Card */}
-          <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-            <img src={post.author.avatar} alt={post.author.name} className="w-12 h-12 rounded-full object-cover border border-[#3B82F6]" />
+        {/* Author Metadata Card */}
+        <div className="flex items-center justify-between border-y border-white/10 py-4 mb-10">
+          <div className="flex items-center gap-3">
+            <img src={post.author.avatar} alt={post.author.name} className="w-10 h-10 rounded-full object-cover border border-[#3B82F6]/40" />
             <div>
-              <span className="text-sm font-bold text-white block">{post.author.name}</span>
-              <span className="text-xs text-gray-400">{post.author.role}</span>
+              <div className="text-sm font-bold text-white">{post.author.name}</div>
+              <div className="text-xs text-gray-400">{post.author.role}</div>
             </div>
           </div>
+          <div className="text-xs text-gray-400 font-mono">
+            {post.publishedAt}
+          </div>
         </div>
+      </section>
 
-        {/* Featured Image */}
-        <div className="rounded-3xl overflow-hidden border border-white/10 h-[450px] bg-black">
-          <img src={post.featuredImage} alt={post.title} className="w-full h-full object-cover" />
+      {/* Main Cover Image */}
+      <div className="max-w-4xl mx-auto px-6 mb-12">
+        <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+          <img src={post.featuredImage} alt={post.title} className="w-full h-[400px] object-cover" />
         </div>
+      </div>
 
-        {/* Body HTML Content */}
-        <div
-          className="prose prose-invert prose-indigo max-w-none text-gray-300 text-base leading-relaxed space-y-6"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
+      {/* Content Article Body */}
+      <main className="max-w-3xl mx-auto px-6 pb-20 prose prose-invert prose-blue max-w-none text-gray-300 leading-relaxed">
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        
         {/* SEO Focus Keywords Tags */}
         <div className="pt-8 border-t border-white/10 space-y-3">
           <span className="text-xs uppercase font-mono font-bold text-gray-400 block">Focus Keywords & Tags</span>
@@ -227,11 +240,62 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
             ))}
           </div>
         </div>
-      </article>
+      </main>
 
-      {/* Footer */}
-      <footer className="bg-black border-t border-white/10 py-10 text-center text-xs text-gray-500">
-        © 2026 CUBIX.LAB. All rights reserved.
+      {/* FOOTER */}
+      <footer className="bg-black border-t border-white/10 py-16 text-gray-400 text-sm">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+          <div className="col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#3B82F6]/30 blur-sm rounded-full" />
+                <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-8 h-8 object-contain relative z-10" />
+              </div>
+              <span className="text-xl font-black text-white">Logic<span className="text-[#3B82F6]">Blaze</span></span>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed max-w-sm">
+              LogicBlaze is a global software transformation agency engineering high-scale mobile applications, enterprise AI models, and cloud systems.
+            </p>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Capabilities</div>
+            <ul className="space-y-2.5 text-xs">
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Mobile Engineering</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">AI & Machine Learning</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Enterprise Web</Link></li>
+              <li><Link href="/#services" className="hover:text-[#3B82F6]">Web3 Protocols</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Company</div>
+            <ul className="space-y-2.5 text-xs">
+              <li><Link href="/#work" className="hover:text-[#3B82F6]">Case Studies</Link></li>
+              <li><Link href="/#process" className="hover:text-[#3B82F6]">Process</Link></li>
+              <li><Link href="/#testimonials" className="hover:text-[#3B82F6]">Client Reviews</Link></li>
+              <li><Link href="/blog" className="text-[#3B82F6] hover:underline font-semibold flex items-center gap-1">Insights & Blog</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-white font-bold text-xs uppercase tracking-wider mb-4">Global Hubs</div>
+            <ul className="space-y-2.5 text-xs text-gray-500">
+              <li>San Francisco, CA</li>
+              <li>London, UK</li>
+              <li>Dubai, UAE</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 gap-4">
+          <div>© 2026 LOGICBLAZE. All rights reserved.</div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-gray-400">Privacy Policy</a>
+            <a href="#" className="hover:text-gray-400">Terms of Service</a>
+            <a href="#" className="hover:text-gray-400">Security SLA</a>
+          </div>
+        </div>
       </footer>
     </div>
   );

@@ -21,7 +21,22 @@ import { SITE_KIT_ANALYTICS, DEFAULT_SEO_SETTINGS } from '@/lib/seo-store';
 import { INITIAL_BLOGS } from '@/lib/blog-store';
 
 export default function SiteKitAnalyticsDashboard() {
-  const { overview, trafficSources, searchQueries } = SITE_KIT_ANALYTICS;
+  const [stats, setStats] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch('/api/analytics')
+      .then((res) => res.json())
+      .then((data) => {
+        setStats(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const overview = stats?.overview || SITE_KIT_ANALYTICS.overview;
+  const trafficSources = stats?.trafficSources || SITE_KIT_ANALYTICS.trafficSources;
+  const searchQueries = SITE_KIT_ANALYTICS.searchQueries;
 
   return (
     <div className="space-y-10 animate-fade-in-up">
@@ -160,7 +175,7 @@ export default function SiteKitAnalyticsDashboard() {
           </div>
 
           <div className="space-y-4">
-            {trafficSources.map((source, idx) => (
+            {trafficSources.map((source: any, idx: number) => (
               <div key={idx} className="space-y-1.5">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-gray-300">{source.source}</span>

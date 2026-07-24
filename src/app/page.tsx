@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { getStoredReviews, Review } from '@/lib/reviews-store';
 import {
   Sparkles,
   ArrowRight,
@@ -60,10 +62,43 @@ const AWSBrandIcon = ({ className = "w-6 h-6", style = {} }: { className?: strin
 );
 
 export default function Home() {
+  const [reviewsList, setReviewsList] = useState<Review[]>([]);
+  const [dynamicCaseStudies, setDynamicCaseStudies] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('mobile');
   const [activeFilter, setActiveFilter] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<any | null>(null);
+
+  useEffect(() => {
+    // Fetch dynamic case studies from MySQL API
+    fetch('/api/case-studies')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setDynamicCaseStudies(data);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch live reviews from MySQL API
+    fetch('/api/reviews')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setReviewsList(data);
+        } else {
+          setReviewsList(getStoredReviews());
+        }
+      })
+      .catch(() => setReviewsList(getStoredReviews()));
+
+    // Record Real Page View in MySQL DB
+    fetch('/api/analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: '/', userAgent: navigator.userAgent }),
+    }).catch(() => {});
+  }, []);
 
   // Estimator State
   const [platform, setPlatform] = useState('mobile');
@@ -192,71 +227,83 @@ export default function Home() {
 
   const caseStudies = [
     {
-      id: 'fintech-x',
-      category: 'FinTech & AI',
-      title: 'NeoBank AI - Global Banking & Wealth Platform',
-      metrics: '$1.8B Transacted',
+      id: 'fintech-us-pk',
+      category: 'FinTech',
+      title: 'PaySwift - US-Pakistan Instant Cross-Border Remittance & Digital Wallet',
+      metrics: '$450M+ Annual Volume',
       imageBg: 'from-blue-900/40 to-black',
       tag: 'FinTech',
+      region: 'USA & Pakistan',
       rating: '4.9/5',
-      desc: 'Built an AI-driven smart banking ecosystem serving 2M+ active users with instant automated fraud detection and multi-currency instant settlements.',
-      tech: ['React Native', 'Node.js', 'PyTorch', 'AWS']
+      desc: 'Engineered a state-of-the-art fintech app enabling seamless low-cost cross-border payments between overseas Pakistanis in the US/UK and local Pakistani banks via SBP Raast API integration.',
+      tech: ['React Native', 'Node.js', 'PostgreSQL', 'AWS Cloud']
     },
     {
-      id: 'health-core',
-      category: 'Healthcare',
-      title: 'PulseCare - Real-Time Patient Diagnostic Telemedicine',
-      metrics: '99.8% Accuracy',
+      id: 'ai-health-eu',
+      category: 'Healthcare AI',
+      title: 'MediVision EU - AI Telemedicine & Diagnostic Portal for Europe',
+      metrics: '1.2M Patient Consultations',
       imageBg: 'from-cyan-900/40 to-black',
       tag: 'Healthcare',
+      region: 'Europe (UK, Germany)',
       rating: '5.0/5',
-      desc: 'HIPAA-compliant remote diagnostic portal connecting patients with top specialists via low-latency encrypted video streams and AI vitals analysis.',
-      tech: ['Next.js', 'WebRTC', 'Python', 'Docker']
+      desc: 'GDPR-compliant AI healthcare platform serving European medical clinics with automated patient diagnostic triage, encrypted video streams, and multi-language EHR records.',
+      tech: ['Next.js', 'Python AI', 'WebRTC', 'Docker']
     },
     {
-      id: 'trade-flow',
-      category: 'Web3 / Crypto',
-      title: 'Aura DEX - High-Speed Decentralized Trading Desk',
-      metrics: '<50ms Latency',
+      id: 'web3-us-eu',
+      category: 'Web3 & DeFi',
+      title: 'Aether DEX - High-Speed Multi-Chain Protocol for US & European Traders',
+      metrics: '<35ms Sub-Second Execution',
       imageBg: 'from-purple-900/40 to-black',
       tag: 'Web3',
+      region: 'Global (USA & EU)',
       rating: '4.9/5',
-      desc: 'Decentralized exchange protocol executing institutional-grade orders with automated liquidity routing and zero front-running protection.',
+      desc: 'Formally verified DeFi exchange protocol engineered for institutional traders in North America and EU, featuring zero-knowledge proof privacy and automated market maker liquidity.',
       tech: ['Solidity', 'Rust', 'Ethers.js', 'TailwindCSS']
     },
     {
-      id: 'logix-ai',
-      category: 'AI & Enterprise',
-      title: 'FleetMind - Autonomous Supply Chain & Logistics Engine',
-      metrics: '+42% Efficiency',
-      imageBg: 'from-purple-900/40 to-black',
+      id: 'ai-enterprise-pk-us',
+      category: 'AI Enterprise',
+      title: 'LogiFlow - Autonomous Supply Chain Engine for PK-US Logistics',
+      metrics: '38% Cost Reduction',
+      imageBg: 'from-blue-950/50 to-black',
       tag: 'AI Enterprise',
+      region: 'Pakistan & USA',
       rating: '4.8/5',
-      desc: 'Autonomous AI dispatch and route optimization algorithm reducing fuel emissions and delivery times for 15,000 global freight vehicles.',
+      desc: 'Enterprise AI fleet management and predictive route optimization system handling global freight shipping routes between South Asia, Middle East, and North America.',
       tech: ['Python', 'TensorFlow', 'Go', 'Kubernetes']
     }
   ];
 
+  const activeCaseStudies = dynamicCaseStudies.length > 0 ? dynamicCaseStudies.map((cs) => ({
+    ...cs,
+    desc: cs.description || cs.desc,
+    imageBg: cs.image_bg || cs.imageBg || 'from-blue-900/40 to-black',
+    tech: typeof cs.tech === 'string' ? cs.tech.split(',') : cs.tech
+  })) : caseStudies;
+
   const filteredProjects = activeFilter === 'all'
-    ? caseStudies
-    : caseStudies.filter((c) => c.tag.toLowerCase().includes(activeFilter.toLowerCase()));
+    ? activeCaseStudies
+    : activeCaseStudies.filter((c) => c.tag.toLowerCase().includes(activeFilter.toLowerCase()));
 
   return (
-    <div className="min-h-screen bg-[#081b33] text-white selection:bg-[#3B82F6] selection:text-black font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#0a0b0e] text-white selection:bg-[#3B82F6] selection:text-black font-sans relative overflow-x-hidden">
       {/* Background Ambient Glows */}
-      <div className="glow-ambient top-[-10%] left-[20%] w-[600px] h-[600px] bg-[#3B82F6]/15 animate-pulse-glow" />
-      <div className="glow-ambient top-[35%] right-[-10%] w-[700px] h-[700px] bg-[#A855F7]/10 animate-pulse-glow" />
-      <div className="glow-ambient bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-[#3B82F6]/10" />
+      <div className="glow-ambient top-[-10%] left-[20%] w-[600px] h-[600px] bg-[#3B82F6]/10 animate-pulse-glow" />
+      <div className="glow-ambient top-[35%] right-[-10%] w-[700px] h-[700px] bg-[#A855F7]/08 animate-pulse-glow" />
+      <div className="glow-ambient bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-[#3B82F6]/08" />
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-50 bg-[#081b33]/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
+      <header className="sticky top-0 z-50 bg-[#0a0b0e]/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#3B82F6] to-[#A855F7] flex items-center justify-center shadow-lg shadow-[#3B82F6]/30 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-6 h-6 text-black font-extrabold" />
+            <div className="relative">
+              <div className="absolute inset-0 bg-[#3B82F6]/30 blur-md rounded-full group-hover:bg-[#3B82F6]/60 transition-all" />
+              <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-10 h-10 object-contain relative z-10 group-hover:scale-105 transition-transform" />
             </div>
             <span className="text-2xl font-black tracking-tight text-white">
-              CUBIX<span className="text-[#3B82F6]">.LAB</span>
+              Logic<span className="text-[#3B82F6]">Blaze</span>
             </span>
           </div>
 
@@ -396,11 +443,10 @@ export default function Home() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 min-w-[150px] py-3.5 px-5 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
-                  active
+                className={`flex-1 min-w-[150px] py-3.5 px-5 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer ${active
                     ? 'bg-[#3B82F6] text-black shadow-lg shadow-[#3B82F6]/30 scale-105'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
+                  }`}
               >
                 <Icon className={`w-4.5 h-4.5 ${active ? 'text-black' : 'text-[#3B82F6]'}`} />
                 {tab.label}
@@ -516,11 +562,10 @@ export default function Home() {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full text-xs font-bold capitalize transition-all cursor-pointer ${
-                  activeFilter === filter
+                className={`px-4 py-2 rounded-full text-xs font-bold capitalize transition-all cursor-pointer ${activeFilter === filter
                     ? 'bg-[#3B82F6] text-black shadow-md shadow-[#3B82F6]/20'
                     : 'bg-white/5 border border-white/10 text-gray-400 hover:text-white'
-                }`}
+                  }`}
               >
                 {filter}
               </button>
@@ -538,9 +583,14 @@ export default function Home() {
             >
               <div className={`h-64 bg-gradient-to-br ${project.imageBg} p-8 flex flex-col justify-between relative overflow-hidden`}>
                 <div className="flex items-center justify-between z-10">
-                  <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-bold text-[#3B82F6]">
-                    {project.tag}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-bold text-[#3B82F6]">
+                      {project.tag}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full bg-[#3B82F6]/20 backdrop-blur-md border border-[#3B82F6]/40 text-[10px] font-mono text-gray-200">
+                      🌍 {project.region}
+                    </span>
+                  </div>
                   <div className="flex items-center gap-1 bg-black/60 px-2.5 py-1 rounded-full text-xs font-bold text-yellow-400">
                     <Star className="w-3.5 h-3.5 fill-yellow-400" />
                     {project.rating}
@@ -565,7 +615,7 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tech.map((t, idx) => (
+                  {(project.tech || []).map((t: any, idx: number) => (
                     <span key={idx} className="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-gray-300 border border-white/5">
                       {t}
                     </span>
@@ -621,30 +671,11 @@ export default function Home() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              quote: "Cubix Lab delivered our mobile banking app 3 weeks ahead of schedule. Their technical architecture handled over 100k peak concurrent users on day one without a single hitch.",
-              author: "Marcus Vance",
-              role: "CTO @ FinTech Global",
-              impact: "+340% User Growth"
-            },
-            {
-              quote: "The custom AI agent infrastructure built by Cubix automated 65% of our manual customer diagnostics. Their engineering team is top 1% globally.",
-              author: "Elena Rostova",
-              role: "VP of Product @ HealthPulse",
-              impact: "$1.2M Annual Savings"
-            },
-            {
-              quote: "From smart contract audits to the web frontend, Cubix's Web3 team executed flawlessly. Highly recommended for complex high-throughput systems.",
-              author: "David Chen",
-              role: "Founder @ Aura Ecosystem",
-              impact: "$40M TVL Secured"
-            }
-          ].map((t, idx) => (
-            <div key={idx} className="bg-glass-card p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
+          {reviewsList.map((t, idx) => (
+            <div key={t.id || idx} className="bg-glass-card p-8 rounded-3xl border border-white/10 flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex gap-1 text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
+                  {[...Array(t.rating || 5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400" />
                   ))}
                 </div>
@@ -652,13 +683,13 @@ export default function Home() {
               </div>
 
               <div className="pt-6 border-t border-white/10 mt-6 flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-white text-sm">{t.author}</div>
-                  <div className="text-xs text-gray-500">{t.role}</div>
+                <div className="flex items-center gap-3">
+                  <img src={t.image} alt={t.author} className="w-9 h-9 rounded-full object-cover border border-[#3B82F6]/40" />
+                  <div>
+                    <div className="font-bold text-white text-sm">{t.author}</div>
+                    <div className="text-xs text-gray-500">{t.role}</div>
+                  </div>
                 </div>
-                <span className="text-xs font-bold text-[#3B82F6] bg-[#3B82F6]/10 px-2.5 py-1 rounded">
-                  {t.impact}
-                </span>
               </div>
             </div>
           ))}
@@ -693,13 +724,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
           <div className="col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#3B82F6] flex items-center justify-center text-black font-black">
-                <Sparkles className="w-5 h-5" />
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#3B82F6]/30 blur-sm rounded-full" />
+                <img src="/logo-transparent.png" alt="LogicBlaze Logo" className="w-8 h-8 object-contain relative z-10" />
               </div>
-              <span className="text-xl font-black text-white">CUBIX<span className="text-[#3B82F6]">.LAB</span></span>
+              <span className="text-xl font-black text-white">Logic<span className="text-[#3B82F6]">Blaze</span></span>
             </div>
             <p className="text-xs text-gray-500 leading-relaxed max-w-sm">
-              Cubix.Lab is a global software transformation agency engineering high-scale mobile applications, enterprise AI models, and cloud systems.
+              LogicBlaze is a global software transformation agency engineering high-scale mobile applications, enterprise AI models, and cloud systems.
             </p>
           </div>
 
@@ -719,6 +751,7 @@ export default function Home() {
               <li><a href="#work" className="hover:text-[#3B82F6]">Case Studies</a></li>
               <li><a href="#process" className="hover:text-[#3B82F6]">Process</a></li>
               <li><a href="#testimonials" className="hover:text-[#3B82F6]">Client Reviews</a></li>
+              <li><Link href="/blog" className="text-[#3B82F6] hover:underline font-semibold flex items-center gap-1">Insights & Blog</Link></li>
             </ul>
           </div>
 
@@ -733,7 +766,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 gap-4">
-          <div>© 2026 CUBIX.LAB. All rights reserved.</div>
+          <div>© 2026 LOGICBLAZE. All rights reserved.</div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-gray-400">Privacy Policy</a>
             <a href="#" className="hover:text-gray-400">Terms of Service</a>
@@ -777,11 +810,10 @@ export default function Home() {
                     <button
                       key={p.id}
                       onClick={() => setPlatform(p.id)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                        platform === p.id
+                      className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${platform === p.id
                           ? 'bg-[#3B82F6] text-black border-[#3B82F6]'
                           : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/30'
-                      }`}
+                        }`}
                     >
                       {p.label}
                     </button>
@@ -802,11 +834,10 @@ export default function Home() {
                     <button
                       key={f.id}
                       onClick={() => toggleFeature(f.id)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-bold text-left border flex items-center justify-between transition-all cursor-pointer ${
-                        features.includes(f.id)
+                      className={`py-2.5 px-3 rounded-xl text-xs font-bold text-left border flex items-center justify-between transition-all cursor-pointer ${features.includes(f.id)
                           ? 'bg-[#3B82F6]/20 text-[#3B82F6] border-[#3B82F6]'
                           : 'bg-white/5 text-gray-400 border-white/10'
-                      }`}
+                        }`}
                     >
                       <span>{f.label}</span>
                       {features.includes(f.id) && <CheckCircle2 className="w-4 h-4 text-[#3B82F6]" />}

@@ -263,9 +263,10 @@ function RankMathBlogEditorForm() {
               />
 
               {/* Permalink Display Badge */}
-              <div className="flex items-center gap-2 text-xs font-mono text-gray-500 pt-1">
+              <div className="flex items-center gap-2 text-xs font-mono text-gray-400 bg-[#050608] px-4 py-2 rounded-xl border border-white/10 overflow-x-auto">
+                <Globe2 className="w-4 h-4 text-[#3B82F6] shrink-0" />
                 <span>Permalink:</span>
-                <span className="text-[#3B82F6]">https://cubix.lab/blog/{slug || 'your-slug'}</span>
+                <span className="text-[#3B82F6]">https://logicblaze.co/blog/{slug || 'your-slug'}</span>
               </div>
             </div>
 
@@ -513,7 +514,7 @@ function RankMathBlogEditorForm() {
 
                         {/* Google SERP Card */}
                         <div className="p-3 rounded-xl bg-white text-black space-y-1">
-                          <div className="text-[10px] text-[#202124] truncate">https://cubix.lab &gt; blog &gt; {slug}</div>
+                          <div className="text-[10px] text-[#202124] truncate">https://logicblaze.co &gt; blog &gt; {slug}</div>
                           <div className="text-xs font-bold text-[#1a0dab] line-clamp-1">{seoTitle || title}</div>
                           <div className="text-[11px] text-[#4d5156] line-clamp-2">{metaDescription || excerpt}</div>
                         </div>
@@ -602,7 +603,7 @@ function RankMathBlogEditorForm() {
                           type="text"
                           value={canonicalUrl}
                           onChange={(e) => setCanonicalUrl(e.target.value)}
-                          placeholder="https://cubix.lab/blog/..."
+                          placeholder="https://logicblaze.co/blog/..."
                           className="w-full bg-white/5 text-white p-2.5 rounded-xl border border-white/10 focus:outline-none"
                         />
                       </div>
@@ -635,7 +636,7 @@ function RankMathBlogEditorForm() {
                       <div className="rounded-xl overflow-hidden border border-white/10 bg-black">
                         <img src={featuredImage} alt="Social OG" className="w-full h-28 object-cover" />
                         <div className="p-3.5 space-y-1">
-                          <span className="text-[9px] uppercase text-gray-500 font-mono">CUBIX.LAB</span>
+                          <span className="text-[9px] uppercase text-gray-500 font-mono">LOGICBLAZE.CO</span>
                           <div className="text-xs font-bold text-white line-clamp-1">{seoTitle || title}</div>
                           <div className="text-[10px] text-gray-400 line-clamp-2">{metaDescription || excerpt}</div>
                         </div>

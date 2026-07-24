@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import { DEFAULT_SEO_SETTINGS } from "@/lib/seo-store";
+import PageLoader from "@/components/PageLoader";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -20,6 +22,14 @@ export const metadata: Metadata = {
   description: DEFAULT_SEO_SETTINGS.defaultMetaDescription,
   verification: {
     google: GOOGLE_VERIFICATION,
+  },
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/logo-transparent.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
   },
   openGraph: {
     title: DEFAULT_SEO_SETTINGS.siteTitle,
@@ -83,7 +93,10 @@ export default function RootLayout({
           </Script>
         )}
       </head>
-      <body className="min-h-full flex flex-col bg-[#081b33] text-white" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-[#0a0b0e] text-white" suppressHydrationWarning>
+        <Suspense fallback={null}>
+          <PageLoader />
+        </Suspense>
         {children}
       </body>
     </html>
