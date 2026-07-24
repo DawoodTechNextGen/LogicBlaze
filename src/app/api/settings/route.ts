@@ -14,6 +14,7 @@ export async function GET() {
       og_image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
       gtag_id: 'G-LOGICBLAZE',
       meta_pixel_id: '',
+      google_site_verification: 'np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94',
       robots_txt: 'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://logicblaze.co/sitemap.xml'
     });
   } catch (error: any) {
@@ -31,18 +32,20 @@ export async function POST(request: Request) {
       og_image,
       gtag_id,
       meta_pixel_id,
+      google_site_verification,
       robots_txt
     } = body;
 
     await pool.query(
-      `INSERT INTO site_settings (id, site_title, meta_description, og_image, gtag_id, meta_pixel_id, robots_txt)
-       VALUES ('1', ?, ?, ?, ?, ?, ?)
+      `INSERT INTO site_settings (id, site_title, meta_description, og_image, gtag_id, meta_pixel_id, google_site_verification, robots_txt)
+       VALUES ('1', ?, ?, ?, ?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE
        site_title = VALUES(site_title),
        meta_description = VALUES(meta_description),
        og_image = VALUES(og_image),
        gtag_id = VALUES(gtag_id),
        meta_pixel_id = VALUES(meta_pixel_id),
+       google_site_verification = VALUES(google_site_verification),
        robots_txt = VALUES(robots_txt)`,
       [
         site_title,
@@ -50,6 +53,7 @@ export async function POST(request: Request) {
         og_image,
         gtag_id,
         meta_pixel_id,
+        google_site_verification || 'np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94',
         robots_txt
       ]
     );

@@ -154,6 +154,7 @@ export async function initDatabase() {
         og_image TEXT,
         gtag_id VARCHAR(100),
         meta_pixel_id VARCHAR(100),
+        google_site_verification VARCHAR(255),
         robots_txt TEXT,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       );

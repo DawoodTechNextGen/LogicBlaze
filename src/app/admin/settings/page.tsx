@@ -28,6 +28,7 @@ export default function AdminSettingsPage() {
             defaultOgImage: data.og_image,
             gtagId: data.gtag_id,
             metaPixelId: data.meta_pixel_id,
+            googleSiteVerification: data.google_site_verification || 'np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94',
             googleSearchConsoleVerified: true,
             sitemapEnabled: true,
             robotsTxtCustom: data.robots_txt
@@ -48,6 +49,7 @@ export default function AdminSettingsPage() {
         og_image: settings.defaultOgImage,
         gtag_id: settings.gtagId,
         meta_pixel_id: settings.metaPixelId,
+        google_site_verification: settings.googleSiteVerification,
         robots_txt: settings.robotsTxtCustom
       })
     });
@@ -129,6 +131,23 @@ export default function AdminSettingsPage() {
               className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#3B82F6]"
             />
             <span className="text-[11px] text-gray-500">Injects official Meta Pixel tracking scripts for Facebook conversion tracking</span>
+          </div>
+
+          {/* Google Search Console HTML Meta Verification */}
+          <div className="space-y-2">
+            <label className="text-xs uppercase font-bold text-gray-300 block flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-green-400" />
+              Google Search Console HTML Meta Verification Token
+            </label>
+            <input
+              type="text"
+              required
+              value={settings.googleSiteVerification}
+              onChange={(e) => setSettings({ ...settings, googleSiteVerification: e.target.value })}
+              placeholder="e.g. np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-[#3B82F6]"
+            />
+            <span className="text-[11px] text-gray-500">Injects `<meta name="google-site-verification" content="..." />` tag dynamically from DB</span>
           </div>
         </div>
 

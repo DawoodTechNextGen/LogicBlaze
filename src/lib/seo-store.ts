@@ -4,6 +4,7 @@ export interface SEOSettings {
   defaultOgImage: string;
   gtagId: string; // Google Analytics Measurement ID e.g. G-X89234KJS
   metaPixelId: string; // Meta/FB Pixel ID e.g. 9823471092837
+  googleSiteVerification: string; // Google Search Console HTML Meta Verification Token
   googleSearchConsoleVerified: boolean;
   sitemapEnabled: boolean;
   robotsTxtCustom: string;
@@ -15,6 +16,7 @@ export const DEFAULT_SEO_SETTINGS: SEOSettings = {
   defaultOgImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
   gtagId: 'G-LOGICBLAZE',
   metaPixelId: '9876543210123',
+  googleSiteVerification: 'np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94',
   googleSearchConsoleVerified: true,
   sitemapEnabled: true,
   robotsTxtCustom: 'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://logicblaze.co/sitemap.xml'

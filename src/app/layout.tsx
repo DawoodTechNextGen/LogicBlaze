@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { DEFAULT_SEO_SETTINGS } from "@/lib/seo-store";
 import PageLoader from "@/components/PageLoader";
+import DynamicScripts from "@/components/DynamicScripts";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -15,7 +16,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 // Environment variables fallback to admin defaults
 const GTAG_ID = process.env.NEXT_PUBLIC_GTAG_ID || DEFAULT_SEO_SETTINGS.gtagId;
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || DEFAULT_SEO_SETTINGS.metaPixelId;
-const GOOGLE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "cubix_search_console_token";
+const GOOGLE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "np7_5feImwz5R1Mghxegd1I9iqTysT0jvs7piWRSm94";
 
 export const metadata: Metadata = {
   title: DEFAULT_SEO_SETTINGS.siteTitle,
@@ -94,6 +95,7 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-full flex flex-col bg-[#0a0b0e] text-white" suppressHydrationWarning>
+        <DynamicScripts />
         <Suspense fallback={null}>
           <PageLoader />
         </Suspense>
