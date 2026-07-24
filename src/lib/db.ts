@@ -17,15 +17,19 @@ export async function initDatabase() {
   if (isInitialized) return;
   
   try {
-    // 1. Ensure Database exists
-    const rootConn = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      port: Number(process.env.DB_PORT) || 3306,
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-    });
-    await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'logic_blaze'}\`;`);
-    await rootConn.end();
+    // 1. Ensure Database exists (Try root creation if user has privileges; bypass on shared hosting)
+    try {
+      const rootConn = await mysql.createConnection({
+        host: process.env.DB_HOST || 'localhost',
+        port: Number(process.env.DB_PORT) || 3306,
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+      });
+      await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'logic_blaze'}\`;`);
+      await rootConn.end();
+    } catch (dbErr) {
+      // Shared hosting / cPanel users don't have global DB creation privileges; pool handles connection directly
+    }
 
     // 2. Create Tables & Cleanup unused tables
     await pool.query(`DROP TABLE IF EXISTS admin_credentials;`);
